@@ -1,0 +1,8 @@
+{
+  "name": "JPBILL",
+  "description": "A premium, high-performance billing and management dashboard for Pterodactyl Panel featuring a modern indigo-purple aesthetic and AI-driven support.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
