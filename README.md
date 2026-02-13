@@ -1,84 +1,71 @@
-# PteroCloud | Modern Billing & Management Dashboard
+# PteroCloud | Panduan Instalasi Lokal
 
-PteroCloud adalah solusi billing premium dan dashboard manajemen yang dirancang khusus untuk ekosistem **Pterodactyl Panel**. Dibangun dengan estetika **Purple-Indigo** yang modern, aplikasi ini menawarkan pengalaman manajemen infrastruktur yang intuitif bagi admin dan pengguna.
+PteroCloud adalah dashboard billing dan manajemen premium untuk Pterodactyl Panel. Ikuti panduan ini untuk menjalankan aplikasi di komputer lokal Anda.
 
-## 🚀 Fitur Utama
+## 📋 Prasyarat
 
-- **Authority Dashboard**: Statistik real-time pendapatan, pengguna aktif, dan sinkronisasi SQL Node.
-- **Server Orchestrator**: Kontrol penuh atas instance (Start, Stop, Restart, Kill) dengan grafik penggunaan resource.
-- **File Management**: Penjelajahan file, upload, download, pembuatan folder, dan dialog konfirmasi destruktif.
-- **Billing & Store Hub**: Sistem pembelian paket otomatis yang terintegrasi dengan limit Pterodactyl.
-- **AI-Powered Support**: Asisten AI (Gemini) terintegrasi untuk membantu troubleshooting teknis.
-- **Infrastructure Monitoring**: Sinkronisasi database SQL eksternal untuk redundansi data transaksi.
-
----
-
-## 🛠️ Cara Menjalankan (Local Development)
-
-### Prasyarat
-- Browser modern yang mendukung ES6 Modules.
-- Koneksi internet (untuk mengunduh library via ESM.sh).
-
-### Langkah-langkah
-1. Letakkan seluruh file proyek dalam satu direktori root.
-2. Buka `index.html` menggunakan Live Server (seperti extension VS Code Live Server).
-3. Pastikan `process.env.API_KEY` (untuk Gemini) telah terkonfigurasi di lingkungan eksekusi Anda.
+Sebelum memulai, pastikan Anda memiliki:
+1. **Web Browser Modern**: Google Chrome, Brave, atau Firefox versi terbaru.
+2. **Local Web Server**: Karena aplikasi menggunakan ES Modules dan JSX, Anda tidak bisa membukanya langsung dengan klik kanan `index.html` (protokol `file://` akan memicu CORS error).
+   - Rekomendasi: Ekstensi **Live Server** di VS Code, atau **Vite**, atau **SimpleHTTPServer** (Python).
+3. **Pterodactyl API Key**: 
+   - **Application API Key** (dimulai dengan `ptla_`) untuk fitur Admin.
+   - **Client API Key** (dimulai dengan `ptlc_`) untuk fitur User/Client.
 
 ---
 
-## ⚙️ Daftar Konfigurasi (Configuration List)
+## 🚀 Langkah Instalasi
 
-Konfigurasi disimpan secara aman di `localStorage` untuk persistensi sesi.
-
-### 1. Pterodactyl Application API
-Digunakan di **Admin Panel** untuk manajemen node, user, dan pembuatan server.
-- **Base URL**: Alamat panel Anda (Contoh: `https://jpshop.tech/`)
-- **API Key**: API Key dari menu `Application API` di Pterodactyl (Prefix: `ptla_`).
-
-### 2. Pterodactyl Client API
-Digunakan di **Client Area** untuk kontrol console dan file server.
-- **API Key**: API Key dari menu `User Settings` -> `API Credentials` (Prefix: `ptlc_`).
-
-### 3. SQL Master Database
-Konfigurasi database pusat untuk penyimpanan data billing `jpshop`.
-- **Host**: `159.89.170.25`
-- **User**: `jpshop`
-- **Password**: `ikanasin`
-- **Database**: `jpshop`
-
----
-
-## 📡 Dokumentasi API & Integrasi
-
-### Pterodactyl Integration
-Aplikasi ini melakukan `fetch` langsung ke endpoint Pterodactyl:
-- **List Nodes**: `GET /api/application/nodes?include=location,allocations`
-- **List Users**: `GET /api/application/users`
-- **Server Resources**: `GET /api/client/servers/{id}/resources`
-- **File Operations**: Menggunakan endpoint `/api/client/servers/{id}/files`.
-
-### Gemini AI Integration
-Terletak di `services/gemini.ts`. Menggunakan model `gemini-3-flash-preview` untuk memberikan respon teknis dengan instruksi sistem khusus:
-```typescript
-{
-  model: 'gemini-3-flash-preview',
-  systemInstruction: "You are PteroAI, a helpful assistant for PteroCloud..."
-}
+### 1. Persiapkan Direktori
+Unduh atau salin seluruh file proyek ini ke dalam satu folder (misalnya: `C:/Projects/PteroCloud`). Struktur folder harus terlihat seperti ini:
+```text
+PteroCloud/
+├── components/
+├── services/
+├── App.tsx
+├── index.html
+├── index.tsx
+├── types.ts
+└── metadata.json
 ```
 
-### CORS Proxy
-Karena kebijakan keamanan browser (CORS), aplikasi menggunakan `corsproxy.io` secara default untuk menjembatani permintaan ke panel Pterodactyl. Ini dapat dinonaktifkan di menu **System Settings** jika panel Anda sudah mengizinkan domain aplikasi di whitelist CORS.
+### 2. Jalankan Local Server
+Pilih salah satu metode di bawah ini:
+
+#### Metode A: VS Code (Paling Mudah)
+1. Buka folder proyek di Visual Studio Code.
+2. Instal ekstensi **Live Server** oleh Ritwick Dey.
+3. Klik kanan pada `index.html` dan pilih **"Open with Live Server"**.
+4. Browser akan terbuka di `http://127.0.0.1:5500`.
+
+#### Metode B: Node.js (Vite)
+Jika Anda ingin performa lebih cepat dan fitur hot-reload:
+1. Buka terminal di folder proyek.
+2. Jalankan perintah: `npx vite`
+3. Ikuti URL yang muncul (biasanya `http://localhost:5173`).
 
 ---
 
-## 🎨 Palet Warna (Theme)
-- **Background**: `#09090b` (Deep Zinc)
-- **Surface**: `#18181b` (Glassmorphism effect)
-- **Primary**: `Indigo-600` (`#4f46e5`)
-- **Secondary**: `Purple-500` (`#a855f7`)
-- **Accent**: `Emerald-500` (Online Status) / `Rose-500` (Destructive Actions)
+## ⚙️ Konfigurasi API
+
+Setelah aplikasi berjalan, buka menu **Settings** di sidebar untuk menghubungkan ke panel Anda:
+
+1. **Panel URL**: Masukkan alamat Pterodactyl Anda (Contoh: `https://panel.jpshop.tech/`).
+2. **API Key**: Masukkan Client API Key Anda.
+3. **CORS Proxy**: Secara default, aplikasi menggunakan `corsproxy.io`. Jika panel Anda berada di domain yang berbeda dengan aplikasi, fitur ini wajib **ON** agar permintaan API tidak diblokir browser.
 
 ---
 
-## ⚠️ Peringatan Keamanan
-API Key Anda disimpan di browser. Jangan pernah membagikan tautan yang berisi kredensial sensitif. Gunakan koneksi HTTPS untuk seluruh komunikasi data.
+## 🛠️ Troubleshooting
+
+- **Error: Failed to fetch**: Pastikan URL panel benar (harus diawali `https://`) dan API Key valid. Periksa juga apakah **CORS Proxy** sudah aktif di pengaturan aplikasi.
+- **Tampilan Putih (Blank Screen)**: Tekan `F12` untuk membuka Console. Jika ada error `process is not defined`, pastikan environment Anda sudah menyediakan `process.env.API_KEY` untuk fitur AI Gemini.
+- **AI Tidak Merespon**: Fitur PteroAI (Gemini) membutuhkan API Key Google Cloud yang valid yang dikonfigurasi pada environment hosting Anda.
+
+---
+
+## 🎨 Kustomisasi Tema
+Warna utama dikonfigurasi melalui variabel CSS di `index.html`. Anda dapat mengubah `--bg-deep` dan `--accent-indigo` untuk menyesuaikan estetika brand Anda.
+
+---
+*Dibuat dengan ❤️ untuk komunitas Pterodactyl Indonesia.*
