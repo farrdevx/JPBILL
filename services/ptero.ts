@@ -5,6 +5,19 @@ export interface PteroServerExtended extends PteroServer {
   node?: string;
 }
 
+export interface PteroFile {
+  name: string;
+  mode: string;
+  mode_bits: string;
+  size: number;
+  is_directory: boolean;
+  is_file: boolean;
+  is_symlink: boolean;
+  mimetype: string;
+  created_at: string;
+  modified_at: string;
+}
+
 export interface PteroNode {
   id: number;
   name: string;
@@ -52,11 +65,7 @@ export class PteroService {
       ? this.config.baseUrl.trim() 
       : `${this.config.baseUrl.trim()}/`;
     
-    // Construct the direct Ptero API URL
     const targetUrl = `${baseUrl}api/${apiType}${endpoint}`;
-    
-    // Use a robust CORS proxy
-    // corsproxy.io is generally more reliable for custom headers like Pterodactyl's
     const finalUrl = this.config.useProxy 
       ? `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`
       : targetUrl;
@@ -73,28 +82,25 @@ export class PteroService {
       });
 
       if (!response.ok) {
-        // Attempt to parse Ptero's specific error format
         const errData = await response.json().catch(() => ({}));
         const detail = errData.errors?.[0]?.detail || response.statusText;
         throw new Error(`API_ERROR: ${detail} (Status: ${response.status})`);
       }
 
+      // 204 No Content for deletes/actions
+      if (response.status === 204) return null;
+
       return response.json();
     } catch (error: any) {
       if (error.name === 'TypeError' && error.message.toLowerCase().includes('fetch')) {
-        // This is the common "Failed to fetch" which usually means CORS blocked it
-        throw new Error('CORS_OR_NETWORK_ERROR: Permintaan diblokir browser. Pastikan Proxy Aktif (Toggle di bawah) atau tambahkan domain ini ke whitelist CORS panel.');
+        throw new Error('CORS_OR_NETWORK_ERROR: Permintaan diblokir browser. Pastikan Proxy Aktif atau tambahkan domain ini ke whitelist CORS panel.');
       }
       throw error;
     }
   }
 
-  /**
-   * Cek kesehatan API tanpa beban data besar
-   */
   async validateConnection(): Promise<boolean> {
     try {
-      // Endpoint /users?per_page=1 adalah yang paling ringan untuk Application API
       if (this.type === 'application') {
         await this.request('/users?per_page=1');
       } else {
@@ -108,7 +114,6 @@ export class PteroService {
 
   async listNodes(): Promise<PteroNode[]> {
     if (this.type !== 'application') throw new Error("Requires Application API Key");
-    // Sesuai dengan pengujian Postman user: include location & allocations
     const data = await this.request('/nodes?include=location,allocations&per_page=25');
     return data.data.map((item: any) => ({
       ...item.attributes,
@@ -125,9 +130,27 @@ export class PteroService {
     }));
   }
 
-  async createServer(payload: any) {
-    if (this.type !== 'application') throw new Error("Requires Application API Key");
-    return this.request('/servers', 'POST', payload);
+  // Client API File Methods
+  async listFiles(serverId: string, directory: string = '/'): Promise<PteroFile[]> {
+    if (this.type !== 'client') throw new Error("Requires Client API Key");
+    const data = await this.request(`/servers/${serverId}/files/list?directory=${encodeURIComponent(directory)}`);
+    return data.data.map((item: any) => item.attributes);
+  }
+
+  async createFolder(serverId: string, root: string, name: string) {
+    if (this.type !== 'client') throw new Error("Requires Client API Key");
+    return this.request(`/servers/${serverId}/files/create-folder`, 'POST', { root, name });
+  }
+
+  async deleteFiles(serverId: string, root: string, files: string[]) {
+    if (this.type !== 'client') throw new Error("Requires Client API Key");
+    return this.request(`/servers/${serverId}/files/delete`, 'POST', { root, files });
+  }
+
+  async getUploadUrl(serverId: string) {
+    if (this.type !== 'client') throw new Error("Requires Client API Key");
+    const data = await this.request(`/servers/${serverId}/files/upload`);
+    return data.attributes.url;
   }
 }
 
@@ -142,7 +165,7 @@ export const getStoredConfig = (type: 'client' | 'application'): PteroConfigExte
   if (saved) return JSON.parse(saved);
   if (type === 'application') return DEFAULT_APP_CONFIG;
   return {
-    baseUrl: '',
+    baseUrl: 'https://jpshop.tech/',
     apiKey: '',
     useProxy: true
   };

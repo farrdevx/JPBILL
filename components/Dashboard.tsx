@@ -10,7 +10,10 @@ import {
   Database,
   HardDrive,
   ExternalLink,
-  Terminal
+  Terminal,
+  Layers,
+  Zap,
+  Shield
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -24,67 +27,75 @@ import {
 } from 'recharts';
 
 const data = [
-  { name: 'Jan', value: 400 },
-  { name: 'Feb', value: 300 },
-  { name: 'Mar', value: 600 },
-  { name: 'Apr', value: 800 },
-  { name: 'May', value: 500 },
-  { name: 'Jun', value: 900 },
+  { name: 'Mon', value: 400 },
+  { name: 'Tue', value: 300 },
+  { name: 'Wed', value: 600 },
+  { name: 'Thu', value: 800 },
+  { name: 'Fri', value: 500 },
+  { name: 'Sat', value: 900 },
+  { name: 'Sun', value: 750 },
 ];
 
 const Dashboard: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">System Overview</h2>
-        <div className="flex gap-2">
-          <span className="flex items-center gap-2 px-3 py-1 bg-emerald-500/10 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            All Systems Operational
-          </span>
+    <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h2 className="text-4xl font-black text-white tracking-tighter mb-2">Authority Deck</h2>
+          <p className="text-zinc-500 font-medium">Global infrastructure telemetry and financial metrics.</p>
+        </div>
+        <div className="flex gap-3">
+          <div className="flex items-center gap-3 px-5 py-2.5 bg-[#181330] rounded-2xl border border-white/5">
+            <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+            <span className="text-[10px] font-black uppercase text-emerald-500 tracking-widest">Systems Online</span>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard label="Total Servers" value="14" icon={<Server size={18}/>} change="+2" />
-        <MetricCard label="Avg. Uptime" value="99.98%" icon={<Activity size={18}/>} change="0.01%" />
-        <MetricCard label="Global Latency" value="24ms" icon={<Globe size={18}/>} />
-        <MetricCard label="Cloud Balance" value="$421.50" icon={<TrendingUp size={18}/>} isCurrency />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <MetricCard label="Active Nodes" value="14" icon={<Layers size={22}/>} change="+2" color="indigo" />
+        <MetricCard label="Service Pulse" value="99.9%" icon={<Zap size={22}/>} color="indigo" />
+        <MetricCard label="Net Ingress" value="2.4ms" icon={<Globe size={22}/>} color="indigo" />
+        <MetricCard label="Credits Balance" value="$1,245.50" icon={<TrendingUp size={22}/>} color="indigo" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 surface rounded-xl p-6">
-          <div className="flex items-center justify-between mb-8">
-            <h3 className="font-bold text-zinc-100">Network Usage</h3>
-            <select className="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-300 focus:outline-none focus:border-indigo-500">
-              <option>Last 30 Days</option>
-              <option>Last 7 Days</option>
-            </select>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 surface rounded-[2.5rem] p-10 border-white/5">
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <h3 className="text-xl font-bold text-white">Ingress Flow</h3>
+              <p className="text-xs text-zinc-500 mt-1">Packets per second monitoring</p>
+            </div>
           </div>
-          <div className="h-[280px]">
+          <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#27272a" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
                 <XAxis 
                   dataKey="name" 
                   axisLine={false} 
                   tickLine={false} 
-                  fontSize={12} 
-                  tick={{ fill: '#71717a' }}
+                  fontSize={10} 
+                  tick={{ fill: '#71717a', fontWeight: 700 }}
+                  dy={10}
                 />
                 <YAxis 
                   axisLine={false} 
                   tickLine={false} 
-                  fontSize={12} 
-                  tick={{ fill: '#71717a' }}
+                  fontSize={10} 
+                  tick={{ fill: '#71717a', fontWeight: 700 }}
+                  dx={-10}
                 />
                 <Tooltip 
-                  cursor={{ fill: '#27272a' }}
-                  contentStyle={{ backgroundColor: '#18181b', border: '1px solid #3f3f46', borderRadius: '8px' }}
+                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                  contentStyle={{ backgroundColor: '#110d23', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
                 />
-                <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                <Bar dataKey="value" radius={[4, 4, 0, 0]} barSize={40}>
                   {data.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === data.length - 1 ? '#6366f1' : '#3f3f46'} />
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={index === data.length - 1 ? '#6366f1' : '#2b2347'} 
+                    />
                   ))}
                 </Bar>
               </BarChart>
@@ -92,110 +103,107 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="surface rounded-xl p-6 flex flex-col">
-          <h3 className="font-bold text-zinc-100 mb-6 flex items-center justify-between">
-            Node Resources
-            <ExternalLink size={14} className="text-zinc-500 hover:text-white cursor-pointer" />
-          </h3>
-          <div className="space-y-6 flex-1">
-            <ResourceGauge label="vCPU Allocation" value={65} icon={<Cpu size={14} />} color="bg-indigo-500" />
-            <ResourceGauge label="Memory Usage" value={42} icon={<Database size={14} />} color="bg-indigo-400" />
-            <ResourceGauge label="Storage Pool" value={82} icon={<HardDrive size={14} />} color="bg-indigo-300" />
+        <div className="surface rounded-[2.5rem] p-10 flex flex-col border-white/5">
+          <h3 className="text-xl font-bold text-white mb-8">Node Load</h3>
+          <div className="space-y-8 flex-1">
+            <ResourceGauge label="CPU POOL" value={65} icon={<Cpu size={16} />} color="bg-indigo-500" />
+            <ResourceGauge label="RAM POOL" value={42} icon={<Database size={16} />} color="bg-indigo-400" />
+            <ResourceGauge label="DISK POOL" value={82} icon={<HardDrive size={16} />} color="bg-indigo-300" />
           </div>
-          <button className="w-full mt-8 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-sm font-semibold rounded-lg transition-colors">
-            Node Settings
+          <button className="w-full mt-12 py-4 bg-white/5 hover:bg-white/10 text-white text-[10px] font-black uppercase tracking-widest rounded-2xl transition-all border border-white/5">
+            Optimize Resources
           </button>
         </div>
       </div>
 
-      <div className="surface rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-zinc-800">
-          <h3 className="font-bold text-white">Recent Deployments</h3>
+      <div className="surface rounded-[2.5rem] overflow-hidden border-white/5">
+        <div className="p-8 border-b border-white/5 flex items-center justify-between">
+          <h3 className="text-xl font-bold text-white">Global Instances</h3>
+          <button className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">View History</button>
         </div>
-        <table className="w-full text-left text-sm">
-          <thead className="bg-[#1c1c1f] text-zinc-400 border-b border-zinc-800">
-            <tr>
-              <th className="px-6 py-3 font-semibold">Instance Name</th>
-              <th className="px-6 py-3 font-semibold">Node</th>
-              <th className="px-6 py-3 font-semibold">Config</th>
-              <th className="px-6 py-3 font-semibold">Status</th>
-              <th className="px-6 py-3 font-semibold text-right">Action</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-800">
-            <TableRow id="hub-01" name="NodeJS API" node="Singapore-1" config="2vCPU / 4GB" status="Online" />
-            <TableRow id="db-01" name="Postgres-DB" node="USA-West" config="1vCPU / 2GB" status="Online" />
-            <TableRow id="redis-01" name="Redis-Cache" node="Germany-4" config="0.5vCPU / 1GB" status="Starting" />
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="bg-[#110d23] text-zinc-500 border-b border-white/5">
+              <tr>
+                <th className="px-10 py-5 text-[10px] font-black uppercase tracking-widest">Instance Name</th>
+                <th className="px-10 py-5 text-[10px] font-black uppercase tracking-widest">Locator</th>
+                <th className="px-10 py-5 text-[10px] font-black uppercase tracking-widest">State</th>
+                <th className="px-10 py-5 text-right text-[10px] font-black uppercase tracking-widest">Access</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5">
+              <TableRow id="hub-01" name="Auth-Cluster-JP" node="SG-01" status="Online" />
+              <TableRow id="db-01" name="Master-DB-Node" node="US-04" status="Online" />
+              <TableRow id="redis-01" name="Cache-Registry" node="EU-02" status="Syncing" />
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
 };
 
-const MetricCard = ({ label, value, icon, change, isCurrency }: any) => (
-  <div className="surface p-5 rounded-xl flex flex-col gap-3 group hover:border-zinc-600 transition-colors">
-    <div className="flex items-center justify-between">
-      <div className="p-2 bg-zinc-800 text-zinc-400 group-hover:text-indigo-400 transition-colors rounded">
-        {icon}
+const MetricCard = ({ label, value, icon, change, color }: any) => {
+  return (
+    <div className="surface p-8 rounded-[2rem] flex flex-col gap-5 border-white/5">
+      <div className="flex items-center justify-between">
+        <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-400">
+          {icon}
+        </div>
+        {change && (
+          <span className="text-[10px] font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full uppercase tracking-widest">
+            {change}
+          </span>
+        )}
       </div>
-      {change && (
-        <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-1.5 py-0.5 rounded">
-          {change}
-        </span>
-      )}
+      <div>
+        <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{label}</p>
+        <h4 className="text-3xl font-black mt-2 text-white tracking-tighter">{value}</h4>
+      </div>
     </div>
-    <div>
-      <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">{label}</p>
-      <h4 className="text-2xl font-bold mt-1">{value}</h4>
-    </div>
-  </div>
-);
+  );
+};
 
 const ResourceGauge = ({ label, value, icon, color }: any) => (
-  <div className="space-y-2">
-    <div className="flex items-center justify-between text-xs">
-      <div className="flex items-center gap-2 text-zinc-400">
+  <div className="space-y-3">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-3 text-[10px] font-black text-zinc-500 uppercase tracking-widest">
         {icon}
-        <span>{label}</span>
+        {label}
       </div>
-      <span className="font-bold text-zinc-200">{value}%</span>
+      <span className="text-[10px] font-black text-white">{value}%</span>
     </div>
-    <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+    <div className="h-1.5 w-full bg-[#110d23] rounded-full overflow-hidden border border-white/5">
       <div 
-        className={`h-full ${color} transition-all duration-700 ease-out`}
+        className={`h-full ${color} rounded-full transition-all duration-1000 ease-out`}
         style={{ width: `${value}%` }}
       ></div>
     </div>
   </div>
 );
 
-const TableRow = ({ id, name, node, config, status }: { id: string, name: string, node: string, config: string, status: string }) => {
+const TableRow = ({ id, name, node, status }: { id: string, name: string, node: string, status: string }) => {
   const navigate = useNavigate();
   return (
-    <tr className="hover:bg-zinc-800/50 transition-colors group">
-      <td className="px-6 py-4 font-medium text-zinc-100">{name}</td>
-      <td className="px-6 py-4 text-zinc-400">{node}</td>
-      <td className="px-6 py-4 text-zinc-400">{config}</td>
-      <td className="px-6 py-4">
-        <span className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide border ${
-          status === 'Online' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 
-          'bg-amber-500/10 text-amber-500 border-amber-500/20'
+    <tr className="hover:bg-white/[0.02] transition-colors group">
+      <td className="px-10 py-6">
+        <span className="font-bold text-white text-sm">{name}</span>
+      </td>
+      <td className="px-10 py-6 text-xs font-bold text-zinc-500 uppercase tracking-wider">{node}</td>
+      <td className="px-10 py-6">
+        <span className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${
+          status === 'Online' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-indigo-500/10 text-indigo-400'
         }`}>
-          <span className={`w-1 h-1 rounded-full ${status === 'Online' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
           {status}
         </span>
       </td>
-      <td className="px-6 py-4 text-right">
-        {status === 'Online' && (
-          <button 
-            onClick={() => navigate(`/servers/${id}`)}
-            className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-bold uppercase tracking-wider rounded transition-all shadow-lg shadow-indigo-600/10"
-          >
-            <Terminal size={12} />
-            Manage
-          </button>
-        )}
+      <td className="px-10 py-6 text-right">
+        <button 
+          onClick={() => navigate(`/servers/${id}`)}
+          className="btn-primary px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all"
+        >
+          Manage
+        </button>
       </td>
     </tr>
   );

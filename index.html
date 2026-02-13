@@ -6,43 +6,84 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PteroCloud | Professional Billing & Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Paytone+One&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-deep: #110d23;
+            --surface: #181330;
+            --surface-accent: #211a43;
+            --accent-purple: #8b5cf6;
+            --accent-indigo: #4f46e5;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #09090b;
-            color: #fafafa;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
             -webkit-font-smoothing: antialiased;
+            margin: 0;
+            padding: 0;
         }
+
+        .font-bubbly {
+            font-family: 'Paytone One', sans-serif;
+        }
+
         .surface {
-            background-color: #18181b;
-            border: 1px solid #27272a;
+            background-color: var(--surface);
+            border: 1px solid var(--border-subtle);
         }
+
+        .surface-transparent {
+            background-color: rgba(24, 19, 48, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-subtle);
+        }
+
         .sidebar-active {
-            background-color: #4f46e5;
+            background-color: var(--accent-indigo);
             color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
         }
+
         .console-text {
             font-family: 'JetBrains Mono', monospace;
         }
+
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #09090b;
+            background: var(--bg-deep);
         }
         ::-webkit-scrollbar-thumb {
-            background: #3f3f46;
+            background: #2b2347;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #52525b;
+            background: #3a3061;
         }
-        /* Custom indigo focus */
-        .focus-indigo:focus {
-            outline: 2px solid #6366f1;
-            outline-offset: 2px;
+
+        /* Utility classes for the specific theme */
+        .text-accent { color: #b491ff; }
+        .bg-accent { background-color: #b491ff; }
+        .border-accent { border-color: #b491ff; }
+
+        .btn-primary {
+            background-color: #5865f2; /* Professional Indigo */
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            background-color: #4752c4;
+            transform: translateY(-1px);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
         }
     </style>
 <script type="importmap">

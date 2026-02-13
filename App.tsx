@@ -65,11 +65,8 @@ const App: React.FC = () => {
   return (
     <Router>
       <Routes>
-        {/* Auth Routes */}
         <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login onLogin={handleLogin} />} />
         <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register onRegister={handleLogin} />} />
-
-        {/* Protected Application Routes */}
         <Route 
           path="/*" 
           element={
@@ -95,16 +92,15 @@ const AuthenticatedLayout: React.FC<{
   onLogout: () => void
 }> = ({ isMobileMenuOpen, setIsMobileMenuOpen, onLogout }) => {
   return (
-    <div className="flex min-h-screen bg-[#09090b] text-zinc-100 font-sans selection:bg-indigo-500/30">
+    <div className="flex min-h-screen bg-[#110d23] text-[#f8fafc] font-sans selection:bg-indigo-500/30">
       <SidebarWrapper 
         isMobileMenuOpen={isMobileMenuOpen} 
         setIsMobileMenuOpen={setIsMobileMenuOpen} 
         onLogout={onLogout}
       />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="h-16 bg-[#09090b] border-b border-zinc-800 flex items-center justify-between px-6 sticky top-0 z-40">
+        <header className="h-20 bg-[#110d23] border-b border-white/5 flex items-center justify-between px-8 sticky top-0 z-40">
           <div className="flex items-center gap-4">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -116,26 +112,24 @@ const AuthenticatedLayout: React.FC<{
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="p-2 text-zinc-400 hover:text-white transition-colors relative">
+            <button className="p-2.5 text-zinc-400 hover:text-indigo-400 transition-colors bg-white/5 rounded-xl border border-white/5">
               <Bell size={20} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-indigo-500 rounded-full border-2 border-[#09090b]"></span>
             </button>
-            <div className="h-8 w-[1px] bg-zinc-800 mx-2"></div>
-            <div className="flex items-center gap-3">
+            <div className="h-8 w-[1px] bg-white/5 mx-2"></div>
+            <div className="flex items-center gap-4">
               <div className="text-right hidden sm:block">
-                <p className="text-xs font-semibold text-zinc-100 leading-none mb-1">Davin Sky</p>
-                <p className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">Administrator</p>
+                <p className="text-sm font-bold text-white leading-none mb-1">Davin Sky</p>
+                <p className="text-[10px] text-indigo-400 uppercase tracking-wider font-black">Administrator</p>
               </div>
-              <Link to="/account" className="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 overflow-hidden hover:border-indigo-500 transition-colors">
-                <img src="https://api.dicebear.com/7.x/shapes/svg?seed=Ptero" alt="Avatar" />
+              <Link to="/account" className="w-10 h-10 rounded-xl bg-[#181330] border border-white/10 overflow-hidden hover:border-indigo-500 transition-all p-0.5">
+                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Ptero" alt="Avatar" className="w-full h-full rounded-lg" />
               </Link>
             </div>
           </div>
         </header>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-y-auto relative">
+        <main className="flex-1 p-8 lg:p-10 overflow-y-auto relative">
           <Routes>
-            {/* Client Routes */}
             <Route path="/" element={<Dashboard />} />
             <Route path="/servers" element={<Servers />} />
             <Route path="/servers/:id" element={<ServerManagement />} />
@@ -143,14 +137,11 @@ const AuthenticatedLayout: React.FC<{
             <Route path="/billing" element={<Billing />} />
             <Route path="/account" element={<Account />} />
             <Route path="/settings" element={<SettingsPage />} />
-
-            {/* Admin Routes */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/nodes" element={<NodeManager />} />
             <Route path="/admin/users" element={<MemberDirectory />} />
             <Route path="/admin/plans" element={<PlanOrchestrator />} />
             <Route path="/admin/settings" element={<SystemSettings />} />
-
             <Route path="*" element={<Dashboard />} />
           </Routes>
           <AIChat />
@@ -174,7 +165,7 @@ const SidebarWrapper: React.FC<{
   return (
     <aside 
       className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-[#121214] border-r border-zinc-800 transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 w-72 bg-[#181330] border-r border-white/5 transform transition-transform duration-300 ease-in-out
         lg:relative lg:translate-x-0
         ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
@@ -194,82 +185,78 @@ const SidebarWrapper: React.FC<{
 
 const GlobalSidebar = ({ onLogout }: { onLogout: () => void }) => (
   <>
-    <div className="p-6 flex items-center gap-3">
-      <div className="w-8 h-8 rounded bg-indigo-600 flex items-center justify-center">
-        <Zap className="w-5 h-5 text-white" />
+    <div className="p-8 flex items-center gap-4">
+      <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-900/40">
+        <Zap className="w-6 h-6 text-white fill-white" />
       </div>
-      <span className="text-lg font-bold tracking-tight text-white">PteroCloud</span>
+      <div>
+        <span className="text-xl font-bubbly text-white tracking-wide">PteroCloud</span>
+        <span className="block text-[8px] font-black uppercase text-indigo-400 tracking-[0.2em]">Authority Nodes</span>
+      </div>
     </div>
 
-    <nav className="flex-1 px-4 space-y-1">
-      <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Cloud Services</p>
-      <SidebarLink to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" />
-      <SidebarLink to="/servers" icon={<ServerIcon size={18} />} label="My Instances" />
-      <SidebarLink to="/store" icon={<ShoppingCart size={18} />} label="Deploy Hub" />
-      <SidebarLink to="/billing" icon={<Wallet size={18} />} label="Finance" />
+    <nav className="flex-1 px-6 space-y-2 mt-4">
+      <p className="px-3 text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4">Registry Hub</p>
+      <SidebarLink to="/" icon={<LayoutDashboard size={20} />} label="Overview" />
+      <SidebarLink to="/servers" icon={<ServerIcon size={20} />} label="My Instances" />
+      <SidebarLink to="/store" icon={<ShoppingCart size={20} />} label="Deploy Hub" />
+      <SidebarLink to="/billing" icon={<Wallet size={20} />} label="Balance" />
 
-      <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-8 mb-2">Internal Access</p>
-      <SidebarLink to="/admin" icon={<Crown size={18} className="text-amber-500" />} label="Admin Panel" />
+      <p className="px-3 text-[10px] font-black text-zinc-500 uppercase tracking-widest mt-10 mb-4">Privileged</p>
+      <SidebarLink to="/admin" icon={<Crown size={20} className="text-amber-500" />} label="Authority Deck" />
     </nav>
 
-    <div className="p-4 border-t border-zinc-800 space-y-1">
-      <SidebarLink to="/account" icon={<User size={18} />} label="Account Settings" />
-      <SidebarLink to="/settings" icon={<Settings size={18} />} label="Panel Connection" />
-      <button 
-        onClick={onLogout}
-        className="flex items-center gap-3 w-full p-2.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-500/5 rounded-md transition-colors text-sm font-medium"
-      >
-        <LogOut size={18} />
-        Sign Out
-      </button>
+    <div className="p-6 mt-auto">
+      <div className="space-y-1">
+        <SidebarLink to="/account" icon={<User size={18} />} label="Account" />
+        <SidebarLink to="/settings" icon={<Settings size={18} />} label="Settings" />
+        <button 
+          onClick={onLogout}
+          className="flex items-center gap-3 w-full p-3 text-zinc-400 hover:text-rose-400 hover:bg-rose-500/5 rounded-xl transition-all text-sm font-bold mt-2"
+        >
+          <LogOut size={18} />
+          Sign Out
+        </button>
+      </div>
     </div>
   </>
 );
 
 const AdminSidebar = ({ onLogout }: { onLogout: () => void }) => (
   <>
-    <div className="p-6 flex items-center gap-3">
-      <div className="w-8 h-8 rounded bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-600/30">
-        <Crown className="w-5 h-5 text-white" />
+    <div className="p-8 flex items-center gap-4">
+      <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center">
+        <Crown className="w-6 h-6 text-white" />
       </div>
       <div>
-        <span className="block text-lg font-bold tracking-tight text-white">Authority</span>
-        <span className="block text-[8px] font-black uppercase text-indigo-400 tracking-[0.2em]">PteroCloud Admin</span>
+        <span className="block text-xl font-bubbly text-white">Authority</span>
+        <span className="block text-[8px] font-black uppercase text-indigo-400 tracking-[0.2em]">System Root</span>
       </div>
     </div>
 
-    <nav className="flex-1 px-4 space-y-1">
-      <div className="mb-4">
-        <Link to="/" className="flex items-center gap-2 px-3 py-2 text-[10px] font-black text-indigo-400 hover:text-indigo-300 uppercase tracking-widest transition-colors">
-          <ChevronLeft size={14} /> Back to Client Area
+    <nav className="flex-1 px-6 space-y-2 mt-4">
+      <div className="mb-6">
+        <Link to="/" className="flex items-center gap-2 px-3 py-2.5 text-[10px] font-black text-indigo-400 hover:text-indigo-300 uppercase tracking-widest transition-all bg-white/5 rounded-xl border border-white/5">
+          <ChevronLeft size={14} /> Exit Admin
         </Link>
       </div>
       
-      <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Global Analytics</p>
-      <SidebarLink to="/admin" icon={<LayoutDashboard size={18} />} label="Authority Deck" />
-      <SidebarLink to="/admin/nodes" icon={<Layers size={18} />} label="Infrastructure" />
-      <SidebarLink to="/admin/users" icon={<Users size={18} />} label="Member Directory" />
-      
-      <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-8 mb-2">Management</p>
-      <SidebarLink to="/admin/plans" icon={<Zap size={18} />} label="Plan Orchestrator" />
-      <SidebarLink to="/admin/settings" icon={<Settings2 size={18} />} label="System Core" />
+      <p className="px-3 text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4">Core Management</p>
+      <SidebarLink to="/admin" icon={<LayoutDashboard size={20} />} label="Authority Deck" />
+      <SidebarLink to="/admin/nodes" icon={<Layers size={20} />} label="Infrastructure" />
+      <SidebarLink to="/admin/users" icon={<Users size={20} />} label="Directory" />
+      <SidebarLink to="/admin/plans" icon={<Zap size={20} />} label="Plan Modules" />
+      <SidebarLink to="/admin/settings" icon={<Settings2 size={20} />} label="Core Core" />
     </nav>
 
-    <div className="p-4 border-t border-zinc-800 space-y-1">
+    <div className="p-6 border-t border-white/5">
       <button 
         onClick={onLogout}
-        className="flex items-center gap-3 w-full p-2.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-500/5 rounded-md transition-colors text-sm font-medium"
+        className="flex items-center gap-3 w-full p-3 text-zinc-400 hover:text-rose-400 rounded-xl transition-all text-sm font-bold"
       >
         <LogOut size={18} />
         Sign Out
       </button>
-      <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-xl">
-        <div className="flex items-center gap-3 mb-2">
-           <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div>
-           <span className="text-[10px] font-black text-rose-500 uppercase tracking-widest">Privileged Access</span>
-        </div>
-        <p className="text-[10px] text-zinc-500 leading-relaxed font-medium">Session is encrypted and monitored for security audit.</p>
-      </div>
     </div>
   </>
 );
@@ -281,53 +268,41 @@ const ServerSidebar = ({ server, onLogout }: { server: any, onLogout: () => void
 
   return (
     <>
-      <div className="p-4 border-b border-zinc-800">
-        <Link to="/servers" className="flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-indigo-400 transition-colors mb-4 group">
-          <ChevronLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-          BACK TO SERVERS
+      <div className="p-6 border-b border-white/5">
+        <Link to="/servers" className="flex items-center gap-2 text-[10px] font-black text-zinc-500 hover:text-indigo-400 transition-all mb-6 group uppercase tracking-widest">
+          <ChevronLeft size={14} /> Back to Registry
         </Link>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-indigo-500">
+        <div className="flex items-center gap-4 p-4 bg-[#110d23] rounded-2xl border border-white/5">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
              <ServerIcon size={20} />
           </div>
           <div className="min-w-0">
-            <h3 className="text-sm font-bold text-white truncate">{server.name}</h3>
-            <p className="text-[10px] text-zinc-500 font-mono truncate">{server.id}</p>
+            <h3 className="text-sm font-black text-white truncate">{server.name}</h3>
+            <p className="text-[10px] text-indigo-400 font-bold truncate">SERVER ID</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-        <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-2">Management</p>
-        <TabSidebarLink tab="Console" icon={<Terminal size={18} />} active={currentTab === 'Console'} />
-        <TabSidebarLink tab="Files" icon={<FileCode size={18} />} active={currentTab === 'Files'} />
-        <TabSidebarLink tab="Databases" icon={<Database size={18} />} active={currentTab === 'Databases'} />
-        <TabSidebarLink tab="Schedules" icon={<Calendar size={18} />} active={currentTab === 'Schedules'} />
-        <TabSidebarLink tab="Users" icon={<Users size={18} />} active={currentTab === 'Users'} />
-        
-        <p className="px-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-6 mb-2">System</p>
-        <TabSidebarLink tab="Backups" icon={<Shield size={18} />} active={currentTab === 'Backups'} />
-        <TabSidebarLink tab="Network" icon={<Network size={18} />} active={currentTab === 'Network'} />
-        <TabSidebarLink tab="Startup" icon={<ListRestart size={18} />} active={currentTab === 'Startup'} />
-        <TabSidebarLink tab="Settings" icon={<Settings size={18} />} active={currentTab === 'Settings'} />
-        <TabSidebarLink tab="Activity" icon={<Activity size={18} />} active={currentTab === 'Activity'} />
+      <nav className="flex-1 px-6 py-6 space-y-2 overflow-y-auto">
+        <TabSidebarLink tab="Console" icon={<Terminal size={20} />} active={currentTab === 'Console'} />
+        <TabSidebarLink tab="Files" icon={<FileCode size={20} />} active={currentTab === 'Files'} />
+        <TabSidebarLink tab="Databases" icon={<Database size={20} />} active={currentTab === 'Databases'} />
+        <TabSidebarLink tab="Schedules" icon={<Calendar size={20} />} active={currentTab === 'Schedules'} />
+        <TabSidebarLink tab="Users" icon={<Users size={20} />} active={currentTab === 'Users'} />
+        <TabSidebarLink tab="Backups" icon={<Shield size={20} />} active={currentTab === 'Backups'} />
+        <TabSidebarLink tab="Network" icon={<Network size={20} />} active={currentTab === 'Network'} />
+        <TabSidebarLink tab="Startup" icon={<ListRestart size={20} />} active={currentTab === 'Startup'} />
+        <TabSidebarLink tab="Settings" icon={<Settings size={20} />} active={currentTab === 'Settings'} />
       </nav>
 
-      <div className="p-4 border-t border-zinc-800 space-y-3">
+      <div className="p-6">
         <button 
           onClick={onLogout}
-          className="flex items-center gap-3 w-full p-2.5 text-zinc-400 hover:text-rose-400 hover:bg-rose-500/5 rounded-md transition-colors text-sm font-medium"
+          className="flex items-center gap-3 w-full p-3 text-zinc-400 hover:text-rose-400 rounded-xl transition-all text-sm font-bold"
         >
           <LogOut size={18} />
           Sign Out
         </button>
-        <div className="p-3 bg-zinc-900/50 rounded-lg border border-zinc-800">
-          <div className="flex items-center justify-between mb-2">
-             <span className="text-[10px] font-bold text-zinc-500">UPTIME</span>
-             <span className="text-[10px] font-bold text-emerald-500">ONLINE</span>
-          </div>
-          <p className="text-sm font-mono text-zinc-300">2d 14h 55m</p>
-        </div>
       </div>
     </>
   );
@@ -338,18 +313,18 @@ const Breadcrumbs = () => {
   const pathnames = location.pathname.split('/').filter(x => x);
   
   return (
-    <nav className="flex items-center text-sm text-zinc-400 gap-2">
-      <Link to="/" className="hover:text-white cursor-pointer transition-colors">Portal</Link>
+    <nav className="flex items-center text-[11px] font-black text-zinc-500 gap-3 uppercase tracking-widest">
+      <Link to="/" className="hover:text-white transition-colors">Portal</Link>
       {pathnames.map((name, index) => {
         const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
         const isLast = index === pathnames.length - 1;
         return (
           <React.Fragment key={name}>
-            <ChevronRight size={14} />
+            <ChevronRight size={14} className="text-zinc-700" />
             {isLast ? (
-              <span className="text-zinc-100 font-medium capitalize">{name.replace(/-/g, ' ')}</span>
+              <span className="text-white">{name.replace(/-/g, ' ')}</span>
             ) : (
-              <Link to={routeTo} className="hover:text-white transition-colors capitalize">
+              <Link to={routeTo} className="hover:text-white transition-colors">
                 {name.replace(/-/g, ' ')}
               </Link>
             )}
@@ -368,16 +343,14 @@ const SidebarLink: React.FC<{ to: string; icon: React.ReactNode; label: string; 
     <Link 
       to={to} 
       className={`
-        flex items-center gap-3 p-2.5 rounded-md transition-all text-sm font-medium
+        flex items-center gap-4 p-3.5 rounded-xl transition-all text-sm font-bold
         ${isActive 
-          ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' 
-          : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'}
+          ? 'sidebar-active' 
+          : 'text-zinc-400 hover:text-white hover:bg-white/5'}
         ${className || ''}
       `}
     >
-      <span className={isActive ? 'text-white' : 'text-zinc-500'}>
-        {icon}
-      </span>
+      <span>{icon}</span>
       {label}
     </Link>
   );
@@ -393,15 +366,13 @@ const TabSidebarLink = ({ tab, icon, active }: { tab: string, icon: React.ReactN
     <Link 
       to={to} 
       className={`
-        flex items-center gap-3 p-2.5 rounded-md transition-all text-sm font-medium
+        flex items-center gap-4 p-3.5 rounded-xl transition-all text-sm font-bold
         ${active 
-          ? 'bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 shadow-sm' 
-          : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800'}
+          ? 'bg-indigo-600 text-white' 
+          : 'text-zinc-400 hover:text-white hover:bg-white/5'}
       `}
     >
-      <span className={active ? 'text-indigo-400' : 'text-zinc-500'}>
-        {icon}
-      </span>
+      <span>{icon}</span>
       {tab}
     </Link>
   );
